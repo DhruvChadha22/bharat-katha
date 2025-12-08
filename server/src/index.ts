@@ -13,6 +13,7 @@ import categoriesRouter from "./routes/categories";
 import regionsRouter from "./routes/regions";
 import { cloudinaryConnect } from "./config/cloudinary";
 import "./cron/otpCleanup";
+import "./cron/reloadServer";
 
 const app = express();
 
