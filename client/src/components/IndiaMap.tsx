@@ -26,7 +26,7 @@ export const IndiaMap: React.FC<IndiaMapProps> = ({
                 }}
                 className="w-full h-auto"
             >
-                <Geographies geography="../india-states.json">
+                <Geographies geography="/india-states.json">
                     {({ geographies }) =>
                         geographies.map((geo) => {
                             const stateName = geo.properties.st_nm;
