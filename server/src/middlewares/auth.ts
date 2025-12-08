@@ -26,6 +26,8 @@ export const auth = (req: Request, res: Response, next: NextFunction) => {
                 res.cookie("token", newToken, {
                     httpOnly: true,
                     expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
+                    secure: true,
+                    sameSite: "none",
                 });
             }
 

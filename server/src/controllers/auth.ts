@@ -2,7 +2,7 @@ import otpGenerator from "otp-generator";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import crypto from "crypto";
-import { Request, Response } from "express";
+import { Request, Response, CookieOptions } from "express";
 import { prisma } from "../config/db";
 import { mailSender } from "../utils/mailSender";
 import { emailVerificationTemplate } from "../mail-templates/emailVerification";
@@ -176,9 +176,11 @@ export const login = async (req: Request, res: Response) => {
         const token = jwt.sign(payload, process.env.JWT_SECRET!, {
             expiresIn: "7d",
         });
-        const cookieOptions = {
+        const cookieOptions: CookieOptions = {
             expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000), // 7 days
             httpOnly: true,
+            secure: true,
+            sameSite: "none",
         };
         const data = {
             id: user.id,
@@ -205,6 +207,8 @@ export const logout = async (req: Request, res: Response) => {
     try {
         res.clearCookie("token", {
             httpOnly: true,
+            secure: true,
+            sameSite: "none",
         });
 
         return res.status(200).json({

@@ -251,6 +251,8 @@ export const deleteUser = async (req: Request, res: Response) => {
 
         res.clearCookie("token", {
             httpOnly: true,
+            secure: true,
+            sameSite: "none",
         });
 
         return res.status(200).json({
