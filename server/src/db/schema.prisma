@@ -1,0 +1,102 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id                        String            @id       @default(uuid())
+  name                      String
+  email                     String            @unique
+  password                  String
+  imageUrl                  String
+  imageId                   String?
+  resetPwdToken             String?
+  resetPwdTokenExpiry       DateTime?
+  stories                   Story[]
+  favorites                 Favorite[]
+  createdAt                 DateTime          @default(now())
+}
+
+model Otp {
+  id                        String            @id       @default(uuid())
+  email                     String            @unique
+  otp                       String
+  createdAt                 DateTime          @default(now())
+  expiresAt                 DateTime
+}
+
+model Story {
+  id                        String            @id       @default(uuid())
+  title                     String
+  description               String
+  transcript                String
+  audioUrl                  String
+  audioId                   String
+  imageUrl                  String
+  imageId                   String
+  authorId                  String
+  languageId                String
+  regionId                  String
+  categoryId                String
+  duration                  Int
+  views                     Int
+  favorites                 Favorite[]
+  author                    User              @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  language                  Language          @relation(fields: [languageId], references: [id], onDelete: Restrict)
+  region                    Region            @relation(fields: [regionId], references: [id], onDelete: Restrict)
+  category                  Category          @relation(fields: [categoryId], references: [id], onDelete: Restrict)
+  createdAt                 DateTime          @default(now())
+}
+
+model Favorite {
+  userId                    String
+  storyId                   String
+  user                      User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+  story                     Story             @relation(fields: [storyId], references: [id], onDelete: Cascade)
+  createdAt                 DateTime          @default(now())
+  
+  @@id([userId, storyId])
+}
+
+model Region {
+  id                        String            @id       @default(uuid())
+  name                      String            @unique
+  stories                   Story[]
+}
+
+model Category {
+  id                        String            @id       @default(uuid())
+  name                      String            @unique
+  stories                   Story[]
+}
+
+model Language {
+  id                        String            @id       @default(uuid())
+  name                      String            @unique
+  voices                    Voice[]
+  stories                   Story[]
+}
+
+model Voice {
+  id                        String            @id       @default(uuid())
+  name                      String
+  languageId                String
+  type                      VoiceType
+  language                  Language          @relation(fields: [languageId], references: [id], onDelete: Cascade)
+  @@unique([languageId, type])
+}
+
+enum VoiceType {
+  Male
+  Female
+}
