@@ -1,21 +1,25 @@
-import nodemailer from "nodemailer";
+import axios from "axios";
 
 export const mailSender = async (email: string, title: string, body: string) => {
-    const transporter = nodemailer.createTransport({
-        host: process.env.MAIL_HOST,
-        auth: {
-            user: process.env.MAIL_USER,
-            pass: process.env.MAIL_PASS,
+    const url = "https://api.brevo.com/v3/smtp/email";
+
+    const payload = {
+        sender: {
+            email: process.env.BREVO_FROM_EMAIL,
+            name: process.env.BREVO_FROM_NAME,
+        },
+        to: [{ email }],
+        subject: title,
+        htmlContent: body,
+    };
+
+    const response = await axios.post(url, payload, {
+        headers: {
+            "Content-Type": "application/json",
+            "api-key": process.env.BREVO_API_KEY!,
         },
     });
 
-    const info = await transporter.sendMail({
-        from: "BharatKatha || by Dhruv Chadha",
-        to: email,
-        subject: title,
-        html: body,
-    });
-
-    console.log("Info of sent mail: ", info);
-    return info;
+    console.log("Mail sent: ", response.data);
+    return response.data;
 };
