@@ -40,7 +40,7 @@ export const CTASection: React.FC = () => {
                         <div className="before:pointer-events-none before:absolute before:-top-28 before:left-1/3 before:h-[112px] before:w-0.5 before:bg-primary-300 before:content-[''] before:max-md:hidden after:absolute after:left-[calc(33%-0.5px)] after:-top-1.5 after:z-2 after:size-2.5 after:rounded-full after:border-2 after:border-primary-300 after:bg-[#ebe6e0] after:content-[''] after:max-md:hidden rounded-[40px] relative w-[955px] border-2 border-primary-300">
                             <div className="relative rounded-[40px] bg-[linear-gradient(90deg,_#FFF0E6,_#FFE0CC)] px-4 pb-4 pt-4">
                                 <img
-                                    src="/editor-demo.png"
+                                    src="/home-page.png"
                                     width={1000}
                                     height={1000}
                                     alt="screen"
